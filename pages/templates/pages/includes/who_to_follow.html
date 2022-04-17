@@ -1,0 +1,18 @@
+{% load static %}
+
+<div class="card bg-dark p-3 text-white mb-3">
+    <a href='/' class="d-flex flex-row align-items-center text-decoration-none text-white mb-3">
+        <img src="
+            {% if user_to_follow.image %}
+                {{ user_to_follow.image.url }}
+            {% else %}
+                {% static 'pages/imgs/prof.png' %}
+            {% endif %}
+            " alt="" class="img-fluid rounded-circle" style='width: 50px; height: 50px; object-fit: cover;'>
+        <h6 class="font-weight-bold mx-3">{{ user_to_follow.username }}</h6>
+    </a>
+    <form action="{% url 'follow' user.username user_to_follow.username %}" method='POST' class='w-100 d-flex justify-content-center'>
+        {% csrf_token %}
+        <button type='submit' class='btn btn-success btn-block' name='user_name' value='{{ user_to_follow.username }}'>Follow</button>
+    </form>
+</div>

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class='py-4 mb-3' style='background-color: #eee'>
+        <div class="container">
+            <div class="display-4">Post A New Status</div>
+        </div>
+    </div>
+    <div class="container">
+        <form action="" method='POST' class="form" enctype='multipart/form-data'>
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button class='btn btn-success'>Post</button>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% load static %}
+
+<div class="card bg-dark text-white p-4 my-4">
+    <div class="media">
+        <div class="d-flex flex-direction-row align-items-center mb-3">
+            <img src="
+                {% if status.creator.image %}
+                    {{ status.creator.image.url }}
+                {% else %}
+                    {% static 'pages/imgs/prof.png' %}
+                {% endif %}
+            " alt="" class="rounded-circle img-fluid" style='width: 50px; height: 50px; object-fit: cover;'>
+            <a href="{% url 'profile' status.creator.username %}" class='ml-4 text-white text-decoration-none mx-3'>
+                <h6 class="font-weight-bold">{{ status.creator.username }}</h6>                               
+            </a>
+        </div>
+        <div class="media-body">
+            {% if status.reply_on %}
+                <a href="{% url 'single_status' status.reply_on.creator.username status.reply_on.id  %}" class="card bg-dark border border-white p-3 my-3 text-decoration-none text-white">
+                    <div class="d-flex flex-direction-row align-items-center mb-2">
+                        <img src="
+                            {% if status.reply_on.creator.image %}
+                                {{ status.reply_on.creator.image.url }}
+                            {% else %}
+                                {% static 'pages/imgs/prof.png' %}
+                            {% endif %}
+                        " alt="" class="rounded-circle img-fluid" style='width: 40px; height: 40px; object-fit: cover;'>
+                        <div class='mx-2'>{{ status.reply_on.creator.username }}</div>                               
+                    </div> 
+                    <p class='text-white'>{{ status.reply_on.status_text }}</p>
+                </a>
+            {% endif %}
+            <p class='text-white'>{{ status.status_text }}</p>
+            {% if status.image %}
+                <img src="{{ status.image.url }}" class='rounded w-100 img-fluid' style='height:400px; object-fit: cover;' alt="">
+            {% endif %}
+        </div>
+    </div>
+    <div class="w-100 d-flex flex-row justify-content-around align-items-center mt-3">
+        <a href="{% url 'single_status' status.creator.username status.pk  %}" class="text-decoration-none text-white">
+            <span class="badge badge-success text-white">{{ status.replies.all.count }}</span>
+            Comments
+        </a>
+        <form class='form-inline' method='POST' action="{% url 'likes' user.username status.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-link text-decoration-none text-white" name='status_id' value='{{ status.pk }}'>
+                <span class="badge badge-success text-white">{{ status.likes.all.count }}</span>
+                Like
+            </button>        
+        </form>
+    </div>
+</div>                     

@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block css_files %}
+    <link rel="stylesheet" href="{% static 'pages/pages.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="menu fixed-left my-4">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <a href="{% url 'feed' %}" class='btn link'>
+                        {% comment %} <i class="fa-solid fa-house"></i> {% endcomment %}
+                        Feed
+                    </a>
+                </li>
+                <li class="list-group-item">
+                    <a href="{% url 'explore' %}" class='btn link'>
+                        {% comment %} <i class="fa-solid fa-hashtag"></i> {% endcomment %}
+                        Explore
+                    </a>
+                </li>                    
+                <li class="list-group-item active">
+                    <a href="{% url 'profile' user.username %}" class='btn link text-white'>
+                        {% comment %} <i class="fa-solid fa-user"></i> {% endcomment %}
+                        Profile
+                    </a>
+                </li>
+                <li class="list-group-item">
+                    <a href="{% url 'settings' user.username %}" class='btn link'>
+                        {% comment %} <i class="fa-solid fa-gear"></i> {% endcomment %}
+                        Settings
+                    </a>
+                </li>
+                <li class="list-group-item">
+                    <a href="{% url 'new_status' user.username %}" class='btn link'>
+                        {% comment %} <i class="fa-solid fa-gear"></i> {% endcomment %}
+                        New Status
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="d-flex flex-row justify-content-between my-3">
+            <div style='width: 62%;'>
+                <div class='card'>
+                    <div class="d-flex flex-column align-items-center justify-content-center py-4 px-2">
+                        <img src="
+                            {% if user_profile.image %}
+                                {{ user_profile.image.url }}
+                            {% else %}
+                                {% static 'pages/imgs/prof.png' %}
+                            {% endif %}
+                        " alt="" class="rounded-circle img-fluid" style='width: 70px; height: 70px; object-fit: cover;'>
+                        <h4 class='my-2'>{{ user_profile.username }}</h4>
+                        <div class="btn-group w-50 my-3">
+                            <a href="/" class="btn btn-outline-dark d-flex flex-column justify-content-center align-items-center">
+                                <div>Followers</div>
+                                <div>{{ user_profile.followers.all.count }}</div>
+                            </a>
+                            <a href="/" class="btn btn-outline-dark d-flex flex-column justify-content-center align-items-center">
+                                <div>Following</div>
+                                <div>{{ user_profile.following.all.count }}</div>
+                            </a>
+                        </div>
+                        {% if is_authorized %}
+                            <a href="{% url 'settings' user.username %}" class="btn btn-warning w-50">Edit Profile</a>
+                        {% else %}
+                            <form action="{% url 'follow' user.username user_profile.username %}" method='POST'>
+                                {% csrf_token %}
+                                <button type='submit' class='btn btn-success' name='user_name' value='{{ user_profile.username }}'>Follow</button>
+                            </form>
+                        {% endif %}
+                    </div>
+
+                </div>
+                {% for status in user_profile.status_list.all %}
+                    {% include "./includes/status.html" %}                     
+                {% endfor %} 
+            </div>
+            <div class="card p-3" style='width: 32%;'>
+                <h5 class='mb-3'>Who To Follow</h3>
+                {% for user_to_follow in users_to_follow %}
+                    {% include "./includes/who_to_follow.html" %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

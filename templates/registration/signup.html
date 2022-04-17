@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div style='background-color: #eee;' class='py-4 mb-4'>
+        <div class="container">
+            <h2 class='display-4'>Sign Up</h2>
+            <p class='lead'>Create a new account.</p>
+        </div>
+    </div>
+    <div class="container">
+    <div class="container mt-5">
+        <form action="" method="POST" class='form'>
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button class='btn btn-success my-3'>Sign Up</button>
+        </form>
+    </div>
+{% endblock %}

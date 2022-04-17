@@ -1,0 +1,39 @@
+{% load static %}
+
+<div class="px-4 py-3 border-bottom">
+    <div class="media">
+        <div class="d-flex flex-direction-row align-items-center mb-3">
+            <img src="
+                {% if reply.creator.image %}
+                    {{ reply.creator.image.url }}
+                {% else %}
+                    {% static 'pages/imgs/prof.png' %}
+                {% endif %}
+            " alt="" class="rounded-circle img-fluid" style='width: 50px; height: 50px; object-fit: cover;'>
+            <a href="{% url 'profile' reply.creator.username %}" class='ml-4 text-decoration-none text-black mx-3'>
+                <h6 class="font-weight-bold">{{ reply.creator.username }}</h6>                               
+            </a>
+        </div>
+        <div class="media-body">
+            <p>{{ reply.status_text }}</p>
+            {% if reply.image %}
+                <img src="{{ reply.image.url }}" class='rounded w-100 img-fluid' style='height:400px; object-fit: cover;' alt="">            
+            {% endif %}
+        </div>
+    </div>
+    <div class="w-100 d-flex flex-row justify-content-around align-items-center mt-3">
+        <a href="{% url 'single_status' reply.creator.username reply.id  %}" class="text-decoration-none text-black">
+            <div class="badge badge-success text-black">
+                {{ reply.replies.all.count }}
+            </div>
+            Comments
+        </a>
+        <form class='form-inline' method='POST' action="{% url 'likes' user.username status.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-link text-decoration-none text-black" name='status_id' value='{{ status.pk }}'>
+                <span class="badge badge-success text-black">{{ status.likes.all.count }}</span>
+                Like
+            </button>        
+        </form>
+    </div>
+</div>

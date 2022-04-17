@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block css_files %}
+    <link rel="stylesheet" href="{% static 'pages/pages.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="menu fixed-left my-4">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <a href="{% url 'feed' %}" class='btn link'>
+                        {% comment %} <i class="fa-solid fa-house"></i> {% endcomment %}
+                        Feed
+                    </a>
+                </li>
+                <li class="list-group-item active">
+                    <a href="#" class='btn link text-white'>
+                        {% comment %} <i class="fa-solid fa-hashtag"></i> {% endcomment %}
+                        Explore
+                    </a>
+                </li>                    
+                <li class="list-group-item">
+                    <a href="{% url 'profile' user.username %}" class='btn link'>
+                        {% comment %} <i class="fa-solid fa-user"></i> {% endcomment %}
+                        Profile
+                    </a>
+                </li>
+                <li class="list-group-item">
+                    <a href="{% url 'settings' user.username %}" class='btn link'>
+                        {% comment %} <i class="fa-solid fa-gear"></i> {% endcomment %}
+                        Settings
+                    </a>
+                </li>
+                <li class="list-group-item">
+                    <a href="{% url 'new_status' user.username %}" class='btn link'>
+                        {% comment %} <i class="fa-solid fa-gear"></i> {% endcomment %}
+                        New Status
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="d-flex flex-row justify-content-between my-3">
+            <div style='width: 62%;'>
+                {% for status in status_list %}
+                    {% include "./includes/status.html" %}
+                {% endfor %} 
+            </div>
+            <div class="card p-3" style='width: 32%;'>
+                <h5 class='mb-3'>Who To Follow</h3>
+                {% for user_to_follow in users_to_follow %}
+                    {% include "./includes/who_to_follow.html" %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

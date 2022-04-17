@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="container">
+        {% include "./includes/status.html" %}
+        <div class="d-flex flex-column">
+            <div class="d-flex flex-row align-items-center card bg-light p-4">
+                <img src="
+                    {% if user.image %}
+                        {{ user.image.url }}
+                    {% else %}
+                        {% static 'pages/imgs/prof.png' %}
+                    {% endif %}
+                " alt="" class="rounded-circle img-fluid mx-4" style='width: 50px; height: 50px; object-fit: cover;'>                
+                <form class='form' action="" method='POST' enctype='multipart/form-data'>
+                    {% csrf_token %}
+                    {{ comment_form|crispy }}
+                    <button class='btn btn-success my-3'>Send</button>
+                </form>
+            </div>
+            <div class="card my-4 py-3 bg-light">
+                {% for reply in status.replies.all %}
+                    {% include "./includes/comment.html" %}
+                {% endfor %}            
+            </div>
+        </div>
+    </div>
+{% endblock %}
